@@ -9,7 +9,7 @@
 请确保在运行脚本前，你的文件夹布局如下所示：
 
 ```text
-Environment-Setup/
+WinDevEnvSetup/
 ├── 一键安装.bat               # [学生运行] 鼠标右键-以管理员身份运行
 ├── Main.ps1                   # 主控程序逻辑
 ├── DownloadResources.ps1      # [教师运行] 用于预下载大文件到 Resources
@@ -48,7 +48,7 @@ Environment-Setup/
 
 ## 🚀 安装步骤
 
-1. 将整个 `Environment-Setup` 文件夹拷贝到你的本地磁盘（**建议放在非系统盘**，如 `D:\Environment-Setup`）。
+1. 将整个 `WinDevEnvSetup` 文件夹拷贝到你的本地磁盘（**建议放在非系统盘**，如 `D:\WinDevEnvSetup`）。
 2. 进入文件夹，找到 **`一键安装.bat`**。
 3. **右键点击** 该文件，选择 **“以管理员身份运行”**。
 4. 根据屏幕提示进行操作：
