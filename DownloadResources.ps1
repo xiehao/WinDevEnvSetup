@@ -1,4 +1,4 @@
-$ResourceDir = Join-Path $PSScriptRoot "Resources"
+﻿$ResourceDir = Join-Path $PSScriptRoot "Resources"
 if (!(Test-Path $ResourceDir)) { New-Item -ItemType Directory -Path $ResourceDir }
 
 $Files = @(

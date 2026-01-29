@@ -1,4 +1,4 @@
-Write-Host "[Step 3] 配置 Podman..." -ForegroundColor Yellow
+﻿Write-Host "[Step 3] 配置 Podman..." -ForegroundColor Yellow
 if (!(Get-Command podman -ErrorAction SilentlyContinue)) { scoop install podman }
 
 $LocalAppPath = "$env:LOCALAPPDATA\containers"

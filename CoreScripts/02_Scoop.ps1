@@ -1,4 +1,4 @@
-Write-Host "[Step 2] 安装 Scoop..." -ForegroundColor Yellow
+﻿Write-Host "[Step 2] 安装 Scoop..." -ForegroundColor Yellow
 if (Get-Command scoop -ErrorAction SilentlyContinue) { return }
 
 $sRoot = Read-Host "Scoop 安装路径 [D:\Scoop]"; if (!$sRoot) { $sRoot = "D:\Scoop" }

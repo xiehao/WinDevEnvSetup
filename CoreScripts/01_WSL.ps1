@@ -1,4 +1,4 @@
-Write-Host "[Step 1] 配置 WSL2..." -ForegroundColor Yellow
+﻿Write-Host "[Step 1] 配置 WSL2..." -ForegroundColor Yellow
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 

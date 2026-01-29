@@ -1,4 +1,4 @@
-Write-Host "[Step 5] 准备容器镜像..." -ForegroundColor Yellow
+﻿Write-Host "[Step 5] 准备容器镜像..." -ForegroundColor Yellow
 podman machine start
 $tar = Join-Path $ResourceDir "arch-cpp-dev.tar.zst"
 if (Test-Path $tar) { podman load -i $tar }
