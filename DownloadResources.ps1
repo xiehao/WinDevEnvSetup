@@ -1,16 +1,21 @@
-﻿$ResourceDir = Join-Path $PSScriptRoot "Resources"
+﻿$Arch = if ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") { "arm64" } else { "x64" }
+$ResourceDir = Join-Path $PSScriptRoot "Resources"
 if (!(Test-Path $ResourceDir)) { New-Item -ItemType Directory -Path $ResourceDir }
 
+# Podman WSL OS 官方源 (v5.7.1)
+$PodmanArch = if ($Arch -eq "x64") { "x86_64" } else { "aarch64" }
+$PodmanOSUrl = "https://github.com/containers/podman-machine-os/releases/download/v5.7.1/podman-machine.$PodmanArch.wsl.tar.zst"
+
 $Files = @(
-    @{ Name = "wsl_update_x64.msi"; Url = "https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi" },
-    @{ Name = "fedora-coreos-wsl.xz"; Url = "https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/41.20250106.3.0/x86_64/fedora-coreos-41.20250106.3.0-live-rootfs.x86_64.img.tar.xz" }
+    @{ Name = "wsl_update_$Arch.msi"; Url = "https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_$Arch.msi" },
+    @{ Name = "podman-machine-$PodmanArch-wsl.tar.zst"; Url = $PodmanOSUrl }
 )
 
 foreach ($File in $Files) {
-    $TargetPath = Join-Path $ResourceDir $File.Name
-    if (!(Test-Path $TargetPath)) {
-        Write-Host "正在下载 $($File.Name)..." -ForegroundColor Cyan
-        Invoke-WebRequest -Uri $File.Url -OutFile $TargetPath
+    $Path = Join-Path $ResourceDir $File.Name
+    if (!(Test-Path $Path)) {
+        Write-Host "Downloading $($File.Name)..." -ForegroundColor Cyan
+        Invoke-WebRequest -Uri $File.Url -OutFile $Path
     }
 }
-Write-Host "大文件下载完成！请手动放入 Dockerfile, arch-cpp-dev.tar.zst 和 Container.code-profile。" -ForegroundColor Green
+Write-Host "Download complete for $Arch architecture. Please put `Dockerfile`, `arch-cpp-dev.tar.zst` and `Container.code-profile` in Resources." -ForegroundColor Green
