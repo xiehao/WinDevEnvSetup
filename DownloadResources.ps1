@@ -18,4 +18,4 @@ foreach ($File in $Files) {
         Invoke-WebRequest -Uri $File.Url -OutFile $Path
     }
 }
-Write-Host "Download complete for $Arch architecture. Please put `Dockerfile`, `arch-cpp-dev.tar.zst` and `Container.code-profile` in Resources." -ForegroundColor Green
+Write-Host "Download complete for $Arch architecture. Please put Dockerfile, arch-cpp-dev.tar.zst and Container.code-profile in Resources." -ForegroundColor Green
