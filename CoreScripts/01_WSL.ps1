@@ -1,23 +1,27 @@
-﻿Write-Host "Configuring WSL2..." -ForegroundColor Yellow
-
-# Enable Windows Features
+﻿# Enable Windows Features
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 
-# Tier 1: Local MSI
-$msi = Join-Path $ResourceDir "wsl_update_x64.msi"
+$Arch = if ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") { "arm64" } else { "x64" }
+$msi = Join-Path $ResourceDir "wsl_update_$Arch.msi"
+
+# Install WSL2
 if (Test-Path $msi) {
-    Write-Host "Installing local WSL kernel update..."
+    # Tier 1: Local MSI
+    Write-Host ((T "LocalFirst") -f $msi)
     Start-Process msiexec.exe -ArgumentList "/i `"$msi`" /quiet /norestart" -Wait
-} else {
+}
+else {
     # Tier 2: Network Update
-    Write-Host "未找到本地 MSI 安装包，尝试通过网络更新..."
+    Write-Host (T "NetFallback")
     wsl --update
 }
 
 # Path config
-$choice = Read-Host "Change default WSL path? (Default: D:\WSL, Enter 'N' to skip)"
+$choice = Read-Host (T "WslPathPrompt")
 if ($choice -ne "N") {
-    $target = Read-Host "Input path [D:\WSL]"
-    if ($target) { $State.WSLPath = $target }
+    $target = Read-Host (T "InputPath")
+    if ($target) {
+        $State.WSLPath = $target
+    }
 }
