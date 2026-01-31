@@ -1,2 +1,5 @@
-﻿Write-Host "[Step 4] 安装 VSCode..." -ForegroundColor Yellow
-if (!(Get-Command code -ErrorAction SilentlyContinue)) { scoop install vscode }
+﻿Write-Host "Installing VSCode..." -ForegroundColor Yellow
+if (!(Get-Command code -ErrorAction SilentlyContinue)) {
+    scoop install vscode
+    scoop cache rm *
+}

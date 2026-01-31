@@ -1,15 +1,20 @@
-﻿Write-Host "[Step 2] 安装 Scoop..." -ForegroundColor Yellow
-if (Get-Command scoop -ErrorAction SilentlyContinue) { return }
+﻿Write-Host "Installing Scoop..." -ForegroundColor Yellow
 
-$sRoot = Read-Host "Scoop 安装路径 [D:\Scoop]"; if (!$sRoot) { $sRoot = "D:\Scoop" }
-$gRoot = Read-Host "全局软件路径 [D:\ScoopGlobal]"; if (!$gRoot) { $gRoot = "D:\ScoopGlobal" }
+$env:SCOOP = $State.ScoopPath
+$env:SCOOP_GLOBAL = $State.GlobalPath
+[Environment]::SetEnvironmentVariable('SCOOP', $State.ScoopPath, 'User')
+[Environment]::SetEnvironmentVariable('SCOOP_GLOBAL', $State.GlobalPath, 'Machine')
 
-[Environment]::SetEnvironmentVariable('SCOOP', $sRoot, 'User')
-[Environment]::SetEnvironmentVariable('SCOOP_GLOBAL', $gRoot, 'Machine')
-$env:SCOOP = $sRoot; $env:SCOOP_GLOBAL = $gRoot
+if (!(Get-Command scoop -ErrorAction SilentlyContinue)) {
+    # Network install via mirror
+    iwr -useb scoop.201704.xyz | iex
+}
 
-Invoke-RestMethod -Uri "https://gitee.com/glennirwin/scoop-cn/raw/master/install.ps1" | Invoke-Expression
+# Configure Buckets and Core tools
+Write-Host "Configuring Scoop Buckets..."
+scoop install 7zip git -p
+scoop bucket rm main 2>$null
 scoop bucket add main
 scoop bucket add extras
-scoop install 7zip git
+scoop update
 scoop cache rm *
