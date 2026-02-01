@@ -10,15 +10,30 @@ $Options = @(
     },
     @{ ID = 2; Key = "UnOpt2"; Action = {
             if (Get-Command scoop -ErrorAction SilentlyContinue) { 
-                scoop uninstall vscode 
+                scoop uninstall vscode
             }
         }
     },
     @{ ID = 3; Key = "UnOpt3"; Action = {
-            if (Test-Path $env:SCOOP) { 
-                [Environment]::SetEnvironmentVariable('SCOOP', $null, 'User')
-                [Environment]::SetEnvironmentVariable('SCOOP_GLOBAL', $null, 'Machine')
-                Remove-Item $env:SCOOP -Recurse -Force -ErrorAction SilentlyContinue 
+            # Try the official uninstallation method
+            if (Get-Command scoop -ErrorAction SilentlyContinue) {
+                scoop uninstall scoop -f 2>$null
+            }
+
+            # Cleanup corresponding environment variables (User & Machine)
+            [Environment]::SetEnvironmentVariable('SCOOP', $null, 'User')
+            [Environment]::SetEnvironmentVariable('SCOOP_GLOBAL', $null, 'Machine')
+        
+            # Delete related files physically (e.g. D:\Scoop), if possible
+            $StateFile = Join-Path $PSScriptRoot ".setup_state.json"
+            if (Test-Path $StateFile) {
+                $State = Get-Content $StateFile | ConvertFrom-Json
+                $ScoopPaths = @($State.ScoopPath, $State.GlobalPath, "$env:USERPROFILE\.scoop")
+                foreach ($P in $ScoopPaths) {
+                    if ($P -and (Test-Path $P)) {
+                        Remove-Item $P -Recurse -Force -ErrorAction SilentlyContinue
+                    }
+                }
             }
         }
     },
@@ -47,6 +62,9 @@ $Input = Read-Host (T "UnSelect")
 if ([string]::IsNullOrWhiteSpace($Input) -or $Input.ToLower() -eq "q") {
     Write-Host (T "UnCancel"); exit
 }
+
+# Stop related processes before looping actions.
+Stop-Process -Name "Code", "podman*", "git*" -ErrorAction SilentlyContinue
 
 $Selection = if ($Input.ToLower() -eq "a") { $Options } else {
     $Ids = $Input -split ','; $Ids | ForEach-Object { $id = $_.Trim(); $Options | Where-Object { $_.ID -eq $id } }
