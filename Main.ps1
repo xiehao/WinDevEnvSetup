@@ -36,7 +36,7 @@ for ($i = [int]$State.Step; $i -le 5; $i++) {
     $Script = Get-ChildItem -Path $ScriptDir -Filter "0$i*.ps1"
     if ($Script) {
         Write-Host ("`n" + ((T "StepRunning") -f $i, $Script.Name)) -ForegroundColor Cyan
-        & $Script.FullName
+        & $Script.FullName 
         $Code = $LASTEXITCODE
         if ($Code -eq 3010) {
             Write-Host ((T "RebootNote") -f $i) -ForegroundColor Yellow

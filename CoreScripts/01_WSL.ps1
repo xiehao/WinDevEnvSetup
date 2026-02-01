@@ -12,9 +12,7 @@ if (Test-Path $msi) {
     Write-Host (T "WslKernel") -ForegroundColor Cyan
     Write-Host (T "LocalFirst" $msi) -ForegroundColor Gray
     # Run installation
-    $process = Start-Process msiexec.exe -ArgumentList "/i `"$msi`" /quiet /norestart" -Wait -PassThru
-    # Pass exit code to Main.ps1
-    exit $process.ExitCode
+    Start-Process msiexec.exe -ArgumentList "/i `"$msi`" /quiet /norestart" -Wait -PassThru
 }
 else {
     # Tier 2: Network Update
