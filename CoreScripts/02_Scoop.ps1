@@ -9,8 +9,13 @@ $env:SCOOP_GLOBAL = $State.GlobalPath
 # Install Scoop (using native image)
 if (!(Get-Command scoop -ErrorAction SilentlyContinue)) {
     # Network install via mirror
-    iwr -useb scoop.201704.xyz | iex
+    Set-ExecutionPolicy RemoteSigned -Scope Process -Force
+    iex "& {$(iwr -useb scoop.201704.xyz)} -RunAsAdmin"
 }
+
+# Privilege for current user to have access to installed directory
+$CurrentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+icacls "$($State.ScoopPath)" /grant "${CurrentUser}:(OI)(CI)F" /T /Q /C
 
 # Configure Buckets and Core tools
 scoop install 7zip git -p
