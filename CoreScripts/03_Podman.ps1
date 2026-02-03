@@ -1,9 +1,4 @@
-﻿if (!(Get-Command podman -ErrorAction SilentlyContinue)) {
-    scoop install podman
-    scoop cache rm *
-}
-
-# Symbolic Link for Path Redirection
+﻿# Symbolic Link for Path Redirection
 Write-Host (T "PodmanLink") -ForegroundColor Cyan
 $LocalAppPath = "$env:LOCALAPPDATA\containers"
 if (!(Test-Path $LocalAppPath)) {
@@ -22,17 +17,6 @@ if (!(podman machine list | Select-String "podman-machine-default")) {
     
     if ($rootfs) {
         Write-Host (T "LocalFirst" $rootfs.Name) -ForegroundColor Green
-        
-        # # --- 网络驱动器规避逻辑 ---
-        # $ImportPath = $rootfs.FullName
-        # $isNetwork = $rootfs.FullName.StartsWith("Z:") -or $rootfs.FullName.StartsWith("\\")
-        
-        # if ($isNetwork) {
-        #     Write-Host (T "NetworkDrive") -ForegroundColor Yellow
-        #     $TempLocalFile = Join-Path $env:TEMP $rootfs.Name
-        #     Copy-Item $rootfs.FullName $TempLocalFile -Force
-        #     $ImportPath = $TempLocalFile
-        # }
 
         # Execute initialization
         podman machine init --image-path "$ImportPath" --rootful

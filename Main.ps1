@@ -7,7 +7,7 @@ $StateFile = Join-Path $PSScriptRoot ".setup_state.json"
 if (Test-Path $StateFile) {
     $State = Get-Content $StateFile | ConvertFrom-Json
     # Ask user whether to restart when all steps completed last time
-    if ($State.Step -ge 6) {
+    if ($State.Step -ge 5) {
         $choice = Read-Host (T "ResetChoice")
         if ($choice -eq "Y" -or $choice -eq "y") { 
             $State.Step = 1
@@ -32,7 +32,7 @@ function Save-State($s) {
 
 Write-Host (T "Start") -ForegroundColor Cyan
 
-for ($i = [int]$State.Step; $i -le 5; $i++) {
+for ($i = [int]$State.Step; $i -le 4; $i++) {
     $Script = Get-ChildItem -Path $ScriptDir -Filter "0$i*.ps1"
     if ($Script) {
         Write-Host ("`n" + ((T "StepRunning") -f $i, $Script.Name)) -ForegroundColor Cyan
