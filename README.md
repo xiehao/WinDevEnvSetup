@@ -10,24 +10,26 @@
 
 ```text
 WinDevEnvSetup/
-├── 一键安装.bat               # [学生运行] 鼠标右键-以管理员身份运行
-├── Main.ps1                   # 主控程序逻辑
+├── Install.bat                # [学生运行] 鼠标右键-以管理员身份运行
+├── Install.ps1                # 主控程序逻辑
+├── Uninstall.bat              # [学生运行] 鼠标右键-以管理员身份运行
+├── Uninstall.ps1              # 主控程序逻辑
 ├── DownloadResources.ps1      # [教师运行] 用于预下载大文件到 Resources
 ├── .setup_state.json          # 自动生成：记录安装进度，支持断点续传
 │
 ├── CoreScripts/               # 存放核心逻辑子脚本
 │   ├── 01_WSL.ps1             # WSL2 环境配置
-│   ├── 02_Scoop.ps1           # Scoop 安装与国内镜像配置
-│   ├── 03_Podman.ps1          # Podman 安装、路径重定向与初始化
-│   ├── 04_VSCode.ps1          # VSCode 安装
-│   └── 05_Image.ps1           # 镜像导入与构建
+│   ├── 02_Scoop.ps1           # Scoop 安装、国内镜像配置与工具软件安装
+│   ├── 03_Podman.ps1          # Podman 路径重定向与初始化
+│   └── 04_Image.ps1           # 镜像导入与构建
 │
 └── Resources/                 # 资源文件夹（存放所有大文件）
-    ├── wsl_update_x64.msi     # WSL2 内核更新包
-    ├── fedora-coreos-wsl.xz   # Podman 离线虚拟机镜像
+    ├── Messages.ps1           # 中英文提示字符串常量集合
+    ├── wsl_update_x64.msi     # (可选预下载) WSL2 内核更新包
+    ├── fedora-coreos-wsl.xz   # (可选预下载) Podman 离线虚拟机镜像
     ├── Container.code-profile # VSCode 配置文件备份
     ├── arch-cpp-dev.tar.zst   # (可选) 预打包的容器镜像
-    └── Dockerfile             # (可选) 用于构建镜像的定义文件
+    └── Dockerfile             # 用于构建镜像的定义文件
 
 ```
 
@@ -37,7 +39,7 @@ WinDevEnvSetup/
 
 ### 1. 教师/管理员：下载资源
 
-在分发给学生之前，请先运行 `DownloadResources.ps1`。该脚本会自动从网络下载 `wsl_update_x64.msi` 和 `fedora-coreos-wsl.xz` 并放入 `Resources` 目录。
+在分发给学生之前，请先运行 `DownloadResources.ps1`。该脚本会按本机架构自动从网络下载 `wsl_update_xxx.msi` 和 `fedora-coreos-xxx-wsl.xz` 并放入 `Resources` 目录（其中xxx表示架构名称）。
 
 ### 2. 学生：环境要求
 
@@ -49,7 +51,7 @@ WinDevEnvSetup/
 ## 🚀 安装步骤
 
 1. 将整个 `WinDevEnvSetup` 文件夹拷贝到你的本地磁盘（**建议放在非系统盘**，如 `D:\WinDevEnvSetup`）。
-2. 进入文件夹，找到 **`一键安装.bat`**。
+2. 进入文件夹，找到 **`Install.bat`**。
 3. **右键点击** 该文件，选择 **“以管理员身份运行”**。
 4. 根据屏幕提示进行操作：
 * **路径选择**：脚本会询问是否将 WSL 和 Scoop 安装在 D 盘，建议按回车接受默认设置以节省 C 盘空间。
@@ -85,4 +87,4 @@ WinDevEnvSetup/
 ---
 
 > **遇到问题？**
-> 如果脚本运行过程中卡住（尤其是网络下载阶段），请关闭窗口并重新运行 `一键安装.bat`，脚本会自动从失败的步骤重试。
+> 如果脚本运行过程中卡住（尤其是网络下载阶段），请关闭窗口并重新运行 `Install.bat`，脚本会自动从失败的步骤重试。
