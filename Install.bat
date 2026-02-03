@@ -14,15 +14,15 @@ echo ===========================================
 echo   Starting Environment Setup Launcher
 echo ===========================================
 
-:: Check if Main.ps1 exists
-if not exist "Main.ps1" (
-    echo [ERROR] Main.ps1 not found in: %cd%
+:: Check if Install.ps1 exists
+if not exist "Install.ps1" (
+    echo [ERROR] Install.ps1 not found in: %cd%
     pause
     exit /b
 )
 
 :: Run PowerShell script
-powershell -NoProfile -ExecutionPolicy Bypass -File "Main.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -File "Install.ps1"
 
 :: If the PowerShell script crashes, keep the window open
 if %errorlevel% neq 0 (
